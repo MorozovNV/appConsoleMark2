@@ -1,9 +1,9 @@
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -37,6 +37,10 @@ public class Main {
                 case("b"): balance(a,b,c);
                 outLists(a, b, c, nik, dim, ari);
                     break;
+                case("save"): save(a,b,c,sc);
+                    break;
+                case("load"): load(a,b,c,sc);
+                    break;
                 default:
                     System.out.println("Нет такой команды, по крайней мере пока. Читай че написано:");
                     break;
@@ -45,8 +49,8 @@ public class Main {
     }
 
     public static void outHelp(int lang){
-        if (lang==0) System.out.println("Список команд: h-help, a-add, s-show, c-clear, sum-summing, b-balance, rl-russian commands, e-esc");
-        if (lang==1) System.out.println("Список команд: помогите-помочь, a-внести в общаг, s-фанеру к осмотру, c-убрать с глаз, sum-сложить2+2, b-подвести итоги, el-перейти на англосакский, e-сьебать");
+        if (lang==0) System.out.println("Список команд: h-help, a-add, s-show, c-clear, sum-summing, b-balance, save-saving, load-loading, rl-russian commands, e-esc");
+        if (lang==1) System.out.println("Список команд: помогите-помочь, a-внести в общаг, s-фанеру к осмотру, c-убрать с глаз, sum-сложить2+2, b-подвести итоги, save-добавить в сохраненки, load-выгрузить из сохраненок, l-перейти на англосакский, e-сьебать");
     }
 
     public static void addListControl(List<ArrayList<Double>> arL, List<ArrayList<Double>> b,List<ArrayList<Double>> c, Scanner sc) {
@@ -211,8 +215,62 @@ public class Main {
         c.get(1).add(c1);
     }
 
+    public static void save(List<ArrayList<Double>> a, List<ArrayList<Double>> b, List<ArrayList<Double>> c, Scanner sc) {
+        PrintWriter pw = null;
 
-    public static void main(String[] args) throws IOException {
+        System.out.println("Введите имя сохранения: ");
+        var fileName = sc.nextLine();
+        File fileOut = new File(fileName+".txt");
+        if (fileOut.exists()) {
+            System.out.println("Фаил с таким именем уже существует, перезаписать? y/n ");
+            if(sc.nextLine().equals("n")) return;
+        }
+
+
+        try {
+            if (!fileOut.exists()) fileOut.createNewFile();
+        } catch (IOException e) {
+            System.out.println("Невозможно создать фаил");
+            return;
+        }
+
+        try {
+            pw = new PrintWriter(fileOut);
+        } catch (FileNotFoundException e){
+            System.out.println("Фаил не найден, втф");
+            return;
+        }
+        for(int i=0; i<a.get(0).size(); i++) {
+            for (int j = 0; j < a.get(0).size(); j++) {
+                pw.print(a.get(i).get(j) + " ");
+            }
+        }
+
+        pw.close();
+
+    }
+
+    public static void load(List<ArrayList<Double>> a, List<ArrayList<Double>> b, List<ArrayList<Double>> c, Scanner sc) {
+        System.out.println("Введите имя фаила");
+
+        while (true) {
+            var fileName = sc.nextLine();
+            if(fileName.equals("d")) break;
+
+            try {
+                Scanner scFile = new Scanner(new File(fileName + ".txt"));
+                System.out.println("Фаил найден, все четко.");
+                String a1 = scFile.nextLine();
+                System.out.println(a1);
+                break;
+            } catch (FileNotFoundException e) {
+                System.out.println("Данный фаил не найден. Попробуйте еще раз или завершить командой d-done");
+            }
+        }
+
+    }
+
+    public static void main(String[] args) {
 
         List<ArrayList<Double>> checksNik = new ArrayList<ArrayList<Double>>();
         List<ArrayList<Double>> checksDima = new ArrayList<ArrayList<Double>>();
