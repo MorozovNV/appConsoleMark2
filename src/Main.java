@@ -245,12 +245,24 @@ public class Main {
                 pw.print(a.get(i).get(j) + " ");
             }
         }
-
+        pw.println();
+        for(int i=0; i<b.get(0).size(); i++) {
+            for (int j = 0; j < b.get(0).size(); j++) {
+                pw.print(b.get(i).get(j) + " ");
+            }
+        }
+        pw.println();
+        for(int i=0; i<c.get(0).size(); i++) {
+            for (int j = 0; j < c.get(0).size(); j++) {
+                pw.print(c.get(i).get(j) + " ");
+            }
+        }
         pw.close();
-
     }
 
     public static void load(List<ArrayList<Double>> a, List<ArrayList<Double>> b, List<ArrayList<Double>> c, Scanner sc) {
+        int sizeListFind = 0;
+
         System.out.println("Введите имя фаила");
 
         while (true) {
@@ -262,6 +274,24 @@ public class Main {
                 System.out.println("Фаил найден, все четко.");
                 String a1 = scFile.nextLine();
                 System.out.println(a1);
+                System.out.println("Начинаю поиск размера");
+                for (int i = 0; i < a1.length(); i++) {
+                    if (a1.charAt(i)==' ') {
+                        sizeListFind++;
+                    }
+                }
+                System.out.println("Размер = " + sizeListFind);
+
+                System.out.println("Начинаю считывать");
+                //TODO сделать проверку данных на корректность, данные сохранять сначало в буфере.
+                //clearLists(a,b,c);
+                System.out.println("reset");
+                scFile.close();
+                scFile = new Scanner(new File(fileName + ".txt"));
+                a1 = scFile.nextLine();
+                System.out.println(a1);
+
+
                 break;
             } catch (FileNotFoundException e) {
                 System.out.println("Данный фаил не найден. Попробуйте еще раз или завершить командой d-done");
@@ -269,7 +299,7 @@ public class Main {
         }
 
     }
-
+//sdsdsds
     public static void main(String[] args) {
 
         List<ArrayList<Double>> checksNik = new ArrayList<ArrayList<Double>>();
